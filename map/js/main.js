@@ -1,4 +1,4 @@
-var map, geojson, style;
+var map, geojson, style, source_new;
 
 function init() {
   map = new ol.Map({
@@ -7,7 +7,7 @@ function init() {
     view: new ol.View2D({
       center: ol.proj.transform([19, 52], 'EPSG:4326', "EPSG:900913"),
       maxZoom: 19,
-      zoom: 5
+      zoom: 7
     })
   });
 
@@ -62,29 +62,30 @@ function init() {
   map.addLayer(geojson);
 }
 
-function refresh() {
-  var source_new = new ol.source.GeoJSON({
-    projection: 'EPSG:3857',
-    url: 'http://127.0.0.1:6543/',
-    crossOrigin: 'null'
-  });
+function refresh2(){
   var source_old = geojson.getSource();
   var features_old = source_old.getFeatures();
   var features_new = source_new.getFeatures();
   for(var i=0; i<features_new.length; i++){
     for(var j=0; j<features_old.length; j++){
       if(features_new[i].getProperties().number === features_old[j].getProperties().number){
-        features_old[i].setGeometry(features_new[i].getGeometry);
+        features_old[j].setGeometry(features_new[i].getGeometry());
         break;
       }
     }
   }
-
-
+}
+function refresh() {
+  source_new = new ol.source.GeoJSON({
+    projection: 'EPSG:3857',
+    url: 'http://127.0.0.1:6543/',
+    crossOrigin: 'null'
+  });
+  source_new.on('change', refresh2);
 }
 
 $(function () {
-  setInterval(refresh, 20*1000);
+  setInterval(refresh, 60*1000);
   var exportPNGElement = document.getElementById('export-png');
 
   if ('download' in exportPNGElement) {

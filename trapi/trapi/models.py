@@ -35,7 +35,7 @@ class TrainsCollection(PersistentMapping):
         return ret_dict
 
     def _update(self):
-        if (datetime.utcnow() - self._updated).total_seconds() / 60 > 1:
+        if (datetime.utcnow() - self._updated).total_seconds() > 60:
             print("Updateing!")
             self.trains = []
             self._get_positions()
