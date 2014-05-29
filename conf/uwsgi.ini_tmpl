@@ -16,7 +16,7 @@ pyramid.includes =
     pyramid_zodbconn
 
 tm.attempts = 3
-zodbconn.uri = file://%(here)s/Data.fs?connection_cache_size=20000
+zodbconn.uri = file:///home/apps/tajle/db/Data.fs?connection_cache_size=20000
 
 ###
 # wsgi server configuration
@@ -26,6 +26,34 @@ zodbconn.uri = file://%(here)s/Data.fs?connection_cache_size=20000
 use = egg:waitress#main
 host = 0.0.0.0
 port = 6543
+
+
+[uwsgi]
+socket = /home/apps/tajle/tmp/tajle.sock
+master = true
+
+processes = 4
+
+harakiri = 60
+harakiri-verbose = true
+limit-post = 65536
+post-buffering = 8192
+
+daemonize = ./uwsgi.log
+pidfile = /home/apps/tajle/tmp/pid.pid
+
+listen = 256
+
+max-requests = 1000
+
+reload-on-as = 128
+reload-on-rss = 96
+no-orphans = true
+
+log-slow = true
+
+virtualenv = /home/apps/tajle/env
+
 
 ###
 # logging configuration
@@ -42,11 +70,11 @@ keys = console
 keys = generic
 
 [logger_root]
-level = WARN
+level = INFO
 handlers = console
 
 [logger_trapi]
-level = WARN
+level = DEBUG
 handlers =
 qualname = trapi
 

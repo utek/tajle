@@ -34,10 +34,10 @@ gulp.task("jslint", function () {
 gulp.task("serve", function () {
   startExpress();
   gulp.src(['map/index.html', 'map/js/*.js'])
-    .pipe(watch(function(files){
+    .pipe(watch(function (files) {
       return files.pipe(livereload())
     }))
 
 });
 
-gulp.task('default', ['serve']);
+gulp.task('default', ['serve'])
