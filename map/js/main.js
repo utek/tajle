@@ -52,7 +52,7 @@ function init() {
   geojson = new ol.layer.Vector({
     source: new ol.source.GeoJSON({
       projection: 'EPSG:3857',
-      url: 'http://127.0.0.1:6543/',
+      url: 'http://apps.chladnicka.com/',
       crossOrigin: 'null'
     }),
     style: function (feature, resolution) {
@@ -78,7 +78,7 @@ function refresh2(){
 function refresh() {
   source_new = new ol.source.GeoJSON({
     projection: 'EPSG:3857',
-    url: 'http://127.0.0.1:6543/',
+    url: 'http://apps.chladnicka.com/',
     crossOrigin: 'null'
   });
   source_new.on('change', refresh2);

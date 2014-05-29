@@ -1,10 +1,10 @@
 upstream tajle {
-    server unix:///home/apps/tajle/tmp/tajle.sock;
+    server unix:/home/apps/tajle/tmp/tajle.sock;
 }
 
 server {
     listen 80;
-    server_name tajle.grimcamera.com;
+    server_name tajle.chladnicka.com;
     charset utf-8;
     root /home/apps/tajle/pages;
 }
@@ -12,6 +12,8 @@ server {
 
 server {
     listen 80;
+    access_log off;
+    error_log /home/apps/tajle/logs/http.error.log;
     server_name apps.chladnicka.com;
     charset utf-8;
     client_max_body_size 10M;

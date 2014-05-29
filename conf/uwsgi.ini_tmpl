@@ -16,7 +16,8 @@ pyramid.includes =
     pyramid_zodbconn
 
 tm.attempts = 3
-zodbconn.uri = file:///home/apps/tajle/db/Data.fs?connection_cache_size=20000
+zodbconn.uri = zeo:///home/apps/tajle/tmp/zeo.sock
+#zodbconn.uri = file:///home/apps/tajle/db/Data.fs?connection_cache_size=20000
 
 ###
 # wsgi server configuration
@@ -30,29 +31,31 @@ port = 6543
 
 [uwsgi]
 socket = /home/apps/tajle/tmp/tajle.sock
-master = true
+#master = true
 
-processes = 4
-
-harakiri = 60
-harakiri-verbose = true
-limit-post = 65536
-post-buffering = 8192
+processes = 1
+paste = config:/home/apps/tajle/conf/uwsgi.ini
+#harakiri = 60
+#harakiri-verbose = true
+#limit-post = 65536
+#post-buffering = 8192
 
 daemonize = /home/apps/tajle/logs/uwsgi.log
 pidfile = /home/apps/tajle/tmp/pid.pid
 
-listen = 256
+#listen = 256
 
-max-requests = 1000
+#max-requests = 1000
 
-reload-on-as = 128
-reload-on-rss = 96
+#reload-on-as = 128
+#reload-on-rss = 96
 no-orphans = true
 
-log-slow = true
-
+#log-slow = true
+home = /home/apps/tajle/env
 virtualenv = /home/apps/tajle/env
+chmod-socket = 777
+#chown-socket = nginx:nginx
 
 
 ###
