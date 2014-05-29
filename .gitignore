@@ -84,7 +84,6 @@ sftp-config.json
 
 ### Node ###
 # Logs
-logs
 *.log
 
 # Runtime data
