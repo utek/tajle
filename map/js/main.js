@@ -20,19 +20,65 @@ function init() {
       layer: "osm"
     })
   });
-  style = {
-    'Point': [new ol.style.Style({
+
+var getText = function(feature, resolution) {
+  var type = "normal";
+  var maxResolution = 4000;
+  var text = feature.getProperties().number;
+  if (resolution > maxResolution) {
+    text = '';
+  } else if (type == 'hide') {
+    text = '';
+  } else if (type == 'shorten') {
+    text = text.trunc(12);
+  } else if (type == 'wrap') {
+    text = stringDivider(text, 16, '\n');
+  }
+  return text;
+};
+
+var createTextStyle = function(feature, resolution) {
+  var align = "left";
+  var baseline = "middle";
+  var size = "14px";
+  var offsetX = 0;
+  var offsetY = 0;
+  var weight = "normal";
+  var rotation = 0;
+  var font = weight + ' ' + size + ' ' + "Arial";
+  var fillColor = "#aa3300";
+  var outlineColor = "#ffffff";
+  var outlineWidth = 3;
+  var tt = new ol.style.Text({
+    textAlign: align,
+    textBaseline: baseline,
+    font: font,
+    text: getText(feature, resolution),
+    fill: new ol.style.Fill({color: fillColor}),
+    stroke: new ol.style.Stroke({color: outlineColor, width: outlineWidth}),
+    offsetX: offsetX,
+    offsetY: offsetY,
+    rotation: rotation
+  });
+  return tt;
+};
+
+var createPointStyleFunction = function() {
+  return function(feature, resolution) {
+    var style = new ol.style.Style({
       image: new ol.style.Circle({
-        fill: new ol.style.Fill({
-          color: 'rgba(255,255,0,1)'
-        }),
         radius: 5,
-        stroke: new ol.style.Stroke({
-          color: '#f00',
-          width: 2
-        })
-      })
-    })],
+        fill: new ol.style.Fill({color: 'rgba(255, 255, 0, 0.6)'}),
+        stroke: new ol.style.Stroke({color: 'red', width: 1})
+      }),
+      text: createTextStyle(feature, resolution)
+    });
+    return [style];
+  };
+};
+
+  style = {
+    'Point': createPointStyleFunction(),
     'LineString': [new ol.style.Style({
       stroke: new ol.style.Stroke({
         color: '#f00',
@@ -55,9 +101,7 @@ function init() {
       url: 'http://apps.chladnicka.com/',
       crossOrigin: 'null'
     }),
-    style: function (feature, resolution) {
-      return style[feature.getGeometry().getType()];
-    }
+    style: createPointStyleFunction()
   });
   map.addLayer(geojson);
 }
