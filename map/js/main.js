@@ -98,7 +98,7 @@ var createPointStyleFunction = function() {
   geojson = new ol.layer.Vector({
     source: new ol.source.GeoJSON({
       projection: 'EPSG:3857',
-      url: 'http://apps.chladnicka.com/',
+      url: DATA_URL,
       crossOrigin: 'null'
     }),
     style: createPointStyleFunction()
@@ -122,7 +122,7 @@ function refresh2(){
 function refresh() {
   source_new = new ol.source.GeoJSON({
     projection: 'EPSG:3857',
-    url: 'http://apps.chladnicka.com/',
+    url: DATA_URL,
     crossOrigin: 'null'
   });
   source_new.on('change', refresh2);

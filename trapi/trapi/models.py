@@ -8,6 +8,13 @@ import json
 from dateutil.parser import parse
 from datetime import datetime
 
+pkpstatus_2_no = {
+    "bo": 0,
+    "m5": 5,
+    "m10": 10,
+    "mw": 999
+}
+
 
 class TrainsCollection(PersistentMapping):
 
@@ -56,9 +63,10 @@ class TrainsCollection(PersistentMapping):
                 pnumber = tds[0].a.text.strip()
                 dest = tds[1].text.strip()
                 ncity = tds[3].text.strip()
-                status = tds[2].text.strip()
+                status_text = tds[2].text.strip()
+                status = " ".join(tds[2].get('class', [])).strip()
+                status = pkpstatus_2_no.get(status, -1)
                 act_date = tds[4].text
-
                 position = re.search("\@(\d+\.\d+,\d+\.\d+)\&", gurl)
                 position = [float(x) for x in position.groups()[0].split(",")]
                 position.reverse()
@@ -104,10 +112,10 @@ class Train(object):
             },
             "properties": {
                 "number": self.number,
-                # "path": self.path,
+                "path": self.path,
                 "status": self.status,
                 "nearest_city": self.nearest_city,
-                # "date": self.date.isoformat()
+                "date": self.date.isoformat()
             }
         }
         return ret_dict
