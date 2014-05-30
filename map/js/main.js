@@ -189,23 +189,18 @@ $(function () {
   map.addOverlay(overlay);
 
   map.on('click', function (evt) {
-    console.log("click!");
     var feature = map.forEachFeatureAtPixel(evt.pixel,
       function (feature, layer) {
         return feature;
       });
     if (feature) {
-      console.log("AAAAAA AA?")
-
       var geometry = feature.getGeometry();
       var coord = geometry.getCoordinates();
       overlay.setPosition(coord);
-
       content.innerHTML = '<h4>Train no: ' + feature.get('number') + '</h4>' +
-      '<p>Nearest city: ' + feature.get('nearest_city') + '</p>' +
-      '<p>Position for: ' + feature.get('date') + '</p>';
+        '<p>Nearest city: ' + feature.get('nearest_city') + '</p>' +
+        '<p>Position for: ' + feature.get('date') + '</p>';
       container.style.display = 'block';
-    } else {
-    }
+    } else {}
   });
 })
