@@ -1,5 +1,6 @@
 var map, geojson, style, source_new;
 
+
 function init() {
   map = new ol.Map({
     target: "map",
@@ -21,76 +22,95 @@ function init() {
     })
   });
 
-var getText = function(feature, resolution) {
-  var type = "normal";
-  var maxResolution = 4000;
-  var text = feature.getProperties().number;
-  if (resolution > maxResolution) {
-    text = '';
-  } else if (type == 'hide') {
-    text = '';
-  } else if (type == 'shorten') {
-    text = text.trunc(12);
-  } else if (type == 'wrap') {
-    text = stringDivider(text, 16, '\n');
-  }
-  return text;
-};
-
-var createTextStyle = function(feature, resolution) {
-  var align = "left";
-  var baseline = "middle";
-  var size = "14px";
-  var offsetX = 0;
-  var offsetY = 0;
-  var weight = "normal";
-  var rotation = 0;
-  var font = weight + ' ' + size + ' ' + "Arial";
-  var fillColor = "#aa3300";
-  var outlineColor = "#ffffff";
-  var outlineWidth = 3;
-  var tt = new ol.style.Text({
-    textAlign: align,
-    textBaseline: baseline,
-    font: font,
-    text: getText(feature, resolution),
-    fill: new ol.style.Fill({color: fillColor}),
-    stroke: new ol.style.Stroke({color: outlineColor, width: outlineWidth}),
-    offsetX: offsetX,
-    offsetY: offsetY,
-    rotation: rotation
-  });
-  return tt;
-};
-
-var createPointStyleFunction = function() {
-  return function(feature, resolution) {
-    var style = new ol.style.Style({
-      image: new ol.style.Circle({
-        radius: 5,
-        fill: new ol.style.Fill({color: 'rgba(255, 255, 0, 0.6)'}),
-        stroke: new ol.style.Stroke({color: 'red', width: 1})
-      }),
-      text: createTextStyle(feature, resolution)
-    });
-    return [style];
+  var getText = function (feature, resolution) {
+    var type = "normal";
+    var maxResolution = 4000;
+    var text = feature.getProperties().number;
+    if (resolution > maxResolution) {
+      text = '';
+    } else if (type == 'hide') {
+      text = '';
+    } else if (type == 'shorten') {
+      text = text.trunc(12);
+    } else if (type == 'wrap') {
+      text = stringDivider(text, 16, '\n');
+    }
+    return text;
   };
-};
 
-  style = {
-    'Point': createPointStyleFunction(),
-    'LineString': [new ol.style.Style({
+  var statusColors = function (feature) {
+    var status = feature.getProperties().status;
+    var color;
+    if (status < 0) {
+      color = new ol.style.Fill({
+        color: 'rgba(255, 255, 0, 0.9)'
+      });
+    } else if (status < 5) {
+      color = new ol.style.Fill({
+        color: 'rgba(0, 165, 0, 0.9)'
+      });
+    } else if (status < 10) {
+      color = new ol.style.Fill({
+        color: 'rgba(255, 165, 0, 0.9)'
+      });
+    } else if (status < 999) {
+      color = new ol.style.Fill({
+        color: 'rgba(165, 165, 0, 0.9)'
+      });
+    } else {
+      color = new ol.style.Fill({
+        color: 'rgba(165, 0, 0, 0.9)'
+      });
+    }
+    return color;
+  }
+
+  var createTextStyle = function (feature, resolution) {
+    var align = "left";
+    var baseline = "middle";
+    var size = "14px";
+    var offsetX = 5;
+    var offsetY = 10;
+    var weight = "normal";
+    var rotation = 0;
+    var font = weight + ' ' + size + ' ' + "Arial";
+    var fillColor = "#aa3300";
+    var outlineColor = "#ffffff";
+    var outlineWidth = 3;
+    var tt = new ol.style.Text({
+      textAlign: align,
+      textBaseline: baseline,
+      font: font,
+      text: getText(feature, resolution),
+      fill: new ol.style.Fill({
+        color: fillColor
+      }),
       stroke: new ol.style.Stroke({
-        color: '#f00',
-        width: 3
-      })
-    })],
-    'MultiLineString': [new ol.style.Style({
-      stroke: new ol.style.Stroke({
-        color: '#f00',
-        width: 3
-      })
-    })]
+        color: outlineColor,
+        width: outlineWidth
+      }),
+      offsetX: offsetX,
+      offsetY: offsetY,
+      rotation: rotation
+    });
+    return tt;
+  };
+
+  var createPointStyleFunction = function () {
+    return function (feature, resolution) {
+      var style = new ol.style.Style({
+        image: new ol.style.Circle({
+          radius: 5,
+          fill: statusColors(feature),
+          stroke: new ol.style.Stroke({
+            color: 'red',
+            width: 1
+          })
+        }),
+        text: createTextStyle(feature, resolution)
+      });
+      return [style];
+    };
   };
 
   map.addLayer(osm);
@@ -106,19 +126,15 @@ var createPointStyleFunction = function() {
   map.addLayer(geojson);
 }
 
-function refresh2(){
+function refresh2() {
   var source_old = geojson.getSource();
   var features_old = source_old.getFeatures();
   var features_new = source_new.getFeatures();
-  for(var i=0; i<features_new.length; i++){
-    for(var j=0; j<features_old.length; j++){
-      if(features_new[i].getProperties().number === features_old[j].getProperties().number){
-        features_old[j].setGeometry(features_new[i].getGeometry());
-        break;
-      }
-    }
-  }
+  var exist = false;
+  source_old.clear();
+  source_old.addFeatures(features_new);
 }
+
 function refresh() {
   source_new = new ol.source.GeoJSON({
     projection: 'EPSG:3857',
@@ -129,7 +145,9 @@ function refresh() {
 }
 
 $(function () {
-  setInterval(refresh, 60*1000);
+  init();
+  refresh();
+  setInterval(refresh, 20 * 1000);
   var exportPNGElement = document.getElementById('export-png');
 
   if ('download' in exportPNGElement) {
@@ -141,4 +159,53 @@ $(function () {
       map.render();
     }, false);
   } else {}
+
+  $(map.getViewport()).on('mousemove', function (e) {
+    var pixel = map.getEventPixel(e.originalEvent);
+    var hit = map.forEachFeatureAtPixel(pixel, function (feature, layer) {
+      return true;
+    });
+    if (hit) {
+      map.getViewport().style.cursor = 'pointer';
+    } else {
+      map.getViewport().style.cursor = '';
+    }
+  });
+
+  var container = document.getElementById('popup');
+  var content = document.getElementById('popup-content');
+  var closer = document.getElementById('popup-closer');
+
+  closer.onclick = function () {
+    container.style.display = 'none';
+    closer.blur();
+    return false;
+  };
+
+  var overlay = new ol.Overlay({
+    element: container
+  });
+
+  map.addOverlay(overlay);
+
+  map.on('click', function (evt) {
+    console.log("click!");
+    var feature = map.forEachFeatureAtPixel(evt.pixel,
+      function (feature, layer) {
+        return feature;
+      });
+    if (feature) {
+      console.log("AAAAAA AA?")
+
+      var geometry = feature.getGeometry();
+      var coord = geometry.getCoordinates();
+      overlay.setPosition(coord);
+
+      content.innerHTML = '<h4>Train no: ' + feature.get('number') + '</h4>' +
+      '<p>Nearest city: ' + feature.get('nearest_city') + '</p>' +
+      '<p>Position for: ' + feature.get('date') + '</p>';
+      container.style.display = 'block';
+    } else {
+    }
+  });
 })

@@ -104,6 +104,7 @@ class Train(object):
 
     @property
     def geodict(self):
+        position = [10, 10]
         ret_dict = {
             "type": "Feature",
             "geometry": {
@@ -112,10 +113,11 @@ class Train(object):
             },
             "properties": {
                 "number": self.number,
-                "path": self.path,
+                "path": self.path.encode('utf-8'),
                 "status": self.status,
-                "nearest_city": self.nearest_city,
+                "nearest_city": self.nearest_city.encode('utf-8'),
                 "date": self.date.isoformat()
+                #"date": datetime.now().isoformat()
             }
         }
         return ret_dict
