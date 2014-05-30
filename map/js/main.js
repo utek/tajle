@@ -160,18 +160,6 @@ $(function () {
     }, false);
   } else {}
 
-  $(map.getViewport()).on('mousemove', function (e) {
-    var pixel = map.getEventPixel(e.originalEvent);
-    var hit = map.forEachFeatureAtPixel(pixel, function (feature, layer) {
-      return true;
-    });
-    if (hit) {
-      map.getViewport().style.cursor = 'pointer';
-    } else {
-      map.getViewport().style.cursor = '';
-    }
-  });
-
   var container = document.getElementById('popup');
   var content = document.getElementById('popup-content');
   var closer = document.getElementById('popup-closer');
