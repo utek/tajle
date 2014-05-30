@@ -51,6 +51,7 @@ class TrainsCollection(PersistentMapping):
         res = requests.get(url)
         if res.status_code != 200:
             return None
+        res.encoding = "UTF-8"
         content = res.text
 
         soup = BeautifulSoup(content)
