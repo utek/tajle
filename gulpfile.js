@@ -33,7 +33,7 @@ gulp.task("jslint", function () {
 
 gulp.task("serve", function () {
   startExpress();
-  gulp.src(['map/index.html', 'map/js/*.js'])
+  gulp.src(['map/index.html', 'map/js/*.js', 'map/css/*.css'])
     .pipe(watch(function (files) {
       return files.pipe(livereload())
     }))

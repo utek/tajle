@@ -1,5 +1,5 @@
 from pyramid.view import view_config
-from .models import TrainsCollection
+from trapi.models import TrainsCollection
 
 
 @view_config(context=TrainsCollection, renderer='json')
