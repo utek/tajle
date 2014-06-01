@@ -16,7 +16,7 @@ function init() {
     }]
     map = new ol.Map({
         controls: ol.control.defaults().extend([
-            new app.Legend({
+            new utk.Legend({
                 elements: legend
             })
         ]),
@@ -42,12 +42,6 @@ function init() {
         var text = feature.getProperties().number;
         if (resolution > maxResolution) {
             text = '';
-        } else if (type == 'hide') {
-            text = '';
-        } else if (type == 'shorten') {
-            text = text.trunc(12);
-        } else if (type == 'wrap') {
-            text = stringDivider(text, 16, '\n');
         }
         return text;
     };

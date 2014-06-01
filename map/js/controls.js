@@ -1,12 +1,6 @@
-window.app = {};
-var app = window.app;
+var utk = utk || {};
 
-/**
- * @constructor
- * @extends {ol.control.Control}
- * @param {Object=} opt_options Control options.
- */
-app.Legend = function(opt_options) {
+utk.Legend = function(opt_options) {
 
   var options = opt_options || {elements: []};
   var elements = [];
@@ -32,4 +26,4 @@ app.Legend = function(opt_options) {
   });
 
 };
-ol.inherits(app.Legend, ol.control.Control);
+ol.inherits(utk.Legend, ol.control.Control);
