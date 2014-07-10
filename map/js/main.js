@@ -15,7 +15,7 @@ function init() {
     class: "_3"
   }]
   map = new ol.Map({
-    controls: ol.control.defaults().extend([
+    controls: ol.control.defaults({logo: false}).extend([
       new utk.Legend({
         elements: legend
       })
@@ -117,7 +117,7 @@ function init() {
       return [style];
     };
   };
-  map.addLayer(osm);
+  map.addLayer(mapquest);
   geojson = new ol.layer.Vector({
     source: new ol.source.GeoJSON({
       projection: 'EPSG:3857',
