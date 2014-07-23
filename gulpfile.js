@@ -15,25 +15,25 @@ function startExpress() {
   var express = require("express");
   var app = express();
   app.use(require('connect-livereload')());
-  app.use(express.static(__dirname + "/map"));
+  app.use(express.static(__dirname + "/pages"));
   app.listen(4000);
 }
 
 gulp.task("csslint", function () {
-  return gulp.src("map/css/*.css")
+  return gulp.src("pages/*/css/*.css")
     .pipe(csslint())
     .pipe(csslint.reporter());
 });
 
 gulp.task("jslint", function () {
-  return gulp.src("map/js/*.js")
+  return gulp.src("pages/*/js/*.js")
     .pipe(jslint())
     .pipe(jslint.reporter("default"));
 });
 
 gulp.task("serve", function () {
   startExpress();
-  gulp.src(['map/index.html', 'map/js/*.js', 'map/css/*.css'])
+  gulp.src(['pages/*/index.html', 'pages/*/js/*.js', 'pages/*/css/*.css'])
     .pipe(watch(function (files) {
       return files.pipe(livereload())
     }))
