@@ -1,7 +1,6 @@
 var map, geojson, style, source_new;
 
 function init() {
-<<<<<<< HEAD:pages/map/js/main.js
     var legend = [{
         name: "On time",
         class: "_0"
@@ -52,76 +51,6 @@ function init() {
         }
         return text;
     };
-    var statusColors = function(feature) {
-        var status = feature.getProperties().status;
-        var color;
-        if (status < 0) {
-            color = new ol.style.Fill({
-                color: 'rgba(255, 255, 0, 0.9)'
-            });
-        } else if (status < 5) {
-            color = new ol.style.Fill({
-                color: 'rgba(0, 165, 0, 0.9)'
-            });
-        } else if (status < 10) {
-            color = new ol.style.Fill({
-                color: 'rgba(165, 165, 0, 0.9)'
-            });
-        } else if (status < 999) {
-            color = new ol.style.Fill({
-                color: 'rgba(255, 165, 0, 0.9)'
-            });
-        } else {
-            color = new ol.style.Fill({
-                color: 'rgba(165, 0, 0, 0.9)'
-            });
-        }
-        return color;
-=======
-  var legend = [{
-    name: "On time",
-    class: "_0"
-  }, {
-    name: "5min. delay",
-    class: "_1"
-  }, {
-    name: "10min. delay",
-    class: "_2"
-  }, {
-    name: ">10min. delay",
-    class: "_3"
-  }]
-  map = new ol.Map({
-    controls: ol.control.defaults({logo: false}).extend([
-      new utk.Legend({
-        elements: legend
-      })
-    ]),
-    target: "map",
-    projection: "EPSG:900913",
-    view: new ol.View2D({
-      center: ol.proj.transform([19, 52], 'EPSG:4326', "EPSG:900913"),
-      maxZoom: 19,
-      zoom: 7
-    })
-  });
-  var osm = new ol.layer.Tile({
-    source: new ol.source.OSM()
-  });
-  var mapquest = new ol.layer.Tile({
-    source: new ol.source.MapQuest({
-      layer: "osm"
-    })
-  });
-  var getText = function (feature, resolution) {
-    var type = "normal";
-    var maxResolution = 4000;
-    var text = feature.getProperties().number;
-    if (resolution > maxResolution) {
-      text = '';
->>>>>>> b4c9992bdcf43fb13b173ee4353dcd1b8701a3fd:map/js/main.js
-    }
-    return text;
   };
   var statusColors = function (feature) {
     var status = feature.getProperties().status;
