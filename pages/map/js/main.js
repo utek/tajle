@@ -22,7 +22,7 @@ function init() {
         ]),
         target: "map",
         projection: "EPSG:900913",
-        view: new ol.View2D({
+        view: new ol.View({
             center: ol.proj.transform([19, 52], 'EPSG:4326', "EPSG:900913"),
             maxZoom: 19,
             zoom: 7

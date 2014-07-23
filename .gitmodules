@@ -1,0 +1,3 @@
+[submodule "tripper"]
+	path = tripper
+	url = https://utek@bitbucket.org/utek/tripper.git
