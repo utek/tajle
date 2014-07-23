@@ -182,9 +182,6 @@ $(function () {
     var feature = map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
       return feature;
     });
-<<<<<<< HEAD:pages/map/js/main.js
-})
-=======
     if (feature) {
       var geometry = feature.getGeometry();
       var coord = geometry.getCoordinates();
@@ -196,4 +193,4 @@ $(function () {
     }
   });
 })
->>>>>>> b4c9992bdcf43fb13b173ee4353dcd1b8701a3fd:map/js/main.js
+
