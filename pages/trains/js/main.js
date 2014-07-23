@@ -16,7 +16,7 @@ function init() {
   }]
   map = new ol.Map({
     controls: ol.control.defaults().extend([
-      new app.Legend({
+      new utk.Legend({
         elements: legend
       })
     ]),
