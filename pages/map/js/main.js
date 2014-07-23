@@ -1,58 +1,57 @@
 var map, geojson, style, source_new;
 
 function init() {
-    var legend = [{
-        name: "On time",
-        class: "_0"
-    }, {
-        name: "5min. delay",
-        class: "_1"
-    }, {
-        name: "10min. delay",
-        class: "_2"
-    }, {
-        name: ">10min. delay",
-        class: "_3"
-    }]
-    map = new ol.Map({
-        controls: ol.control.defaults().extend([
-            new app.Legend({
-                elements: legend
-            })
-        ]),
-        target: "map",
-        projection: "EPSG:900913",
-        view: new ol.View({
-            center: ol.proj.transform([19, 52], 'EPSG:4326', "EPSG:900913"),
-            maxZoom: 19,
-            zoom: 7
-        })
-    });
-    var osm = new ol.layer.Tile({
-        source: new ol.source.OSM()
-    });
-    var mapquest = new ol.layer.Tile({
-        source: new ol.source.MapQuest({
-            layer: "osm"
-        })
-    });
-    var getText = function(feature, resolution) {
-        var type = "normal";
-        var maxResolution = 4000;
-        var text = feature.getProperties().number;
-        if (resolution > maxResolution) {
-            text = '';
-        } else if (type == 'hide') {
-            text = '';
-        } else if (type == 'shorten') {
-            text = text.trunc(12);
-        } else if (type == 'wrap') {
-            text = stringDivider(text, 16, '\n');
-        }
-        return text;
-    };
+  var legend = [{
+    name: "On time",
+    class: "_0"
+  }, {
+    name: "5min. delay",
+    class: "_1"
+  }, {
+    name: "10min. delay",
+    class: "_2"
+  }, {
+    name: ">10min. delay",
+    class: "_3"
+  }]
+  map = new ol.Map({
+    controls: ol.control.defaults().extend([
+      new app.Legend({
+        elements: legend
+      })
+    ]),
+    target: "map",
+    projection: "EPSG:900913",
+    view: new ol.View({
+      center: ol.proj.transform([19, 52], 'EPSG:4326', "EPSG:900913"),
+      maxZoom: 19,
+      zoom: 7
+    })
+  });
+  var osm = new ol.layer.Tile({
+    source: new ol.source.OSM()
+  });
+  var mapquest = new ol.layer.Tile({
+    source: new ol.source.MapQuest({
+      layer: "osm"
+    })
+  });
+  var getText = function(feature, resolution) {
+    var type = "normal";
+    var maxResolution = 4000;
+    var text = feature.getProperties().number;
+    if (resolution > maxResolution) {
+      text = '';
+    } else if (type == 'hide') {
+      text = '';
+    } else if (type == 'shorten') {
+      text = text.trunc(12);
+    } else if (type == 'wrap') {
+      text = stringDivider(text, 16, '\n');
+    }
+    return text;
   };
-  var statusColors = function (feature) {
+  var statusColors = function(feature) {
     var status = feature.getProperties().status;
     var color;
     if (status < 0) {
@@ -78,7 +77,7 @@ function init() {
     }
     return color;
   }
-  var createTextStyle = function (feature, resolution) {
+  var createTextStyle = function(feature, resolution) {
     var align = "left";
     var baseline = "middle";
     var size = "14px";
@@ -108,8 +107,8 @@ function init() {
     });
     return tt;
   };
-  var createPointStyleFunction = function () {
-    return function (feature, resolution) {
+  var createPointStyleFunction = function() {
+    return function(feature, resolution) {
       var style = new ol.style.Style({
         image: new ol.style.Circle({
           radius: 5,
@@ -134,7 +133,8 @@ function init() {
     style: createPointStyleFunction()
   });
   map.addLayer(geojson);
-}
+};
+
 
 function refresh2() {
   var source_old = geojson.getSource();
@@ -153,13 +153,13 @@ function refresh() {
   });
   source_new.on('change', refresh2);
 }
-$(function () {
+$(function() {
   init();
   setInterval(refresh, 20 * 1000);
   var exportPNGElement = document.getElementById('export-png');
   if ('download' in exportPNGElement) {
-    exportPNGElement.addEventListener('click', function (e) {
-      map.once('postcompose', function (event) {
+    exportPNGElement.addEventListener('click', function(e) {
+      map.once('postcompose', function(event) {
         var canvas = event.context.canvas;
         exportPNGElement.href = canvas.toDataURL('image/png');
       });
@@ -169,7 +169,7 @@ $(function () {
   var container = document.getElementById('popup');
   var content = document.getElementById('popup-content');
   var closer = document.getElementById('popup-closer');
-  closer.onclick = function () {
+  closer.onclick = function() {
     container.style.display = 'none';
     closer.blur();
     return false;
@@ -178,8 +178,8 @@ $(function () {
     element: container
   });
   map.addOverlay(overlay);
-  map.on('click', function (evt) {
-    var feature = map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
+  map.on('click', function(evt) {
+    var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
       return feature;
     });
     if (feature) {
@@ -193,4 +193,3 @@ $(function () {
     }
   });
 })
-
