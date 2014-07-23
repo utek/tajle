@@ -37,7 +37,13 @@ gulp.task("serve", function () {
     .pipe(watch(function (files) {
       return files.pipe(livereload())
     }))
+});
 
+gulp.task("update", function () {
+  gulp.src('../utk-ol3js-controls/build/js/*.js')
+    .pipe(gulp.dest('map/js'));
+  gulp.src('../utk-ol3js-controls/build/css/*.css')
+    .pipe(gulp.dest('map/css'));
 });
 
 gulp.task('default', ['serve'])
