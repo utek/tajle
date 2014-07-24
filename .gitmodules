@@ -1,3 +1,6 @@
 [submodule "tripper"]
 	path = tripper
 	url = https://utek@bitbucket.org/utek/tripper.git
+[submodule "libs/utk-ol3js-controls"]
+	path = libs/utk-ol3js-controls
+	url = https://github.com/utek/utk-ol3js-controls
